@@ -17,5 +17,9 @@ fn main() {
         "Day 2 Part I\tAnswer: {}",
         twenty_twenty_two::day_two::solve_part_i()
     );
+    println!(
+        "Day 2 Part II\tAnswer: {}",
+        twenty_twenty_two::day_two::solve_part_ii()
+    );
     println!();
 }
