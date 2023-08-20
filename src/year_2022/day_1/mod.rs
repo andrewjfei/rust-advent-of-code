@@ -53,7 +53,7 @@ pub fn solve_part_ii() -> u32 {
 }
 
 fn get_elf_calories_list() -> Vec<u32> {
-    let file_path: String = "./resources/twenty_twenty_two/day_one/input.txt".to_string();
+    let file_path: String = "./resources/year_2022/day_1/input.txt".to_string();
 
     let file: File = File::open(file_path).expect("file does not exist");
     let buf_reader: BufReader<File> = BufReader::new(file);
@@ -161,7 +161,7 @@ pub fn _solve_part_ii_alt() -> u32 {
 }
 
 fn _get_sub_str_list() -> Vec<String> {
-    let file_path: &str = "./resources/twenty_twenty_two/day_one/input.txt";
+    let file_path: &str = "./resources/year_2022/day_1/input.txt";
 
     let str: String = read_to_string(file_path).expect("file does not exist");
 
