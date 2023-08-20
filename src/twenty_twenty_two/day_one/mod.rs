@@ -1,12 +1,12 @@
 use std::{
-    fs::File,
+    fs::{read_to_string, File},
     io::{BufRead, BufReader},
     num::ParseIntError,
 };
 
 pub fn solve_part_i() -> u32 {
     let elf_cals_list: Vec<u32> = get_elf_calories_list();
-    
+
     // attempt to get value of the elf carrying the most calories
     let res: Option<&u32> = elf_cals_list.iter().max();
 
@@ -20,7 +20,7 @@ pub fn solve_part_i() -> u32 {
 
 pub fn solve_part_ii() -> u32 {
     let elf_cals_list: Vec<u32> = get_elf_calories_list();
-    
+
     let mut top_three_arr: [u32; 3] = [0, 0, 0];
     let mut ans = 0;
 
@@ -97,4 +97,79 @@ fn get_elf_calories_list() -> Vec<u32> {
     }
 
     return elf_cals_list;
+}
+
+pub fn _solve_part_i_alt() -> u32 {
+    let sub_str_list: Vec<String> = _get_sub_str_list();
+
+    let mut max_total_cals: u32 = 0;
+
+    // for every elf calculate total calories carried
+    for sub_str in sub_str_list {
+        let mut total_cals: u32 = 0;
+        for line in sub_str.lines() {
+            let val: u32 = line
+                .parse::<u32>()
+                .expect("failed to parse string to integer");
+            total_cals += val;
+        }
+
+        // check if elf total calories is greater than the current maximum elf total calories
+        if total_cals > max_total_cals {
+            max_total_cals = total_cals;
+        }
+    }
+
+    return max_total_cals;
+}
+
+pub fn _solve_part_ii_alt() -> u32 {
+    let sub_str_list: Vec<String> = _get_sub_str_list();
+
+    let mut top_three_total_cals: [u32; 3] = [0, 0, 0];
+    let mut combined_total_cals: u32 = 0;
+
+    // for every elf calculate total calories carried
+    for sub_str in sub_str_list {
+        let mut total_cals: u32 = 0;
+        let mut has_new_top_three: bool = false;
+        let mut min_i: usize = 0;
+
+        for line in sub_str.lines() {
+            let val: u32 = line
+                .parse::<u32>()
+                .expect("failed to parse string to integer");
+            total_cals += val;
+        }
+
+        for i in 0..top_three_total_cals.len() {
+            if total_cals > top_three_total_cals[i] {
+                if !has_new_top_three || top_three_total_cals[i] < top_three_total_cals[min_i] {
+                    has_new_top_three = true;
+                    min_i = i;
+                }
+            }
+        }
+
+        if has_new_top_three {
+            combined_total_cals += total_cals - top_three_total_cals[min_i];
+            top_three_total_cals[min_i] = total_cals;
+        }
+    }
+
+    return combined_total_cals;
+}
+
+fn _get_sub_str_list() -> Vec<String> {
+    let file_path: &str = "./resources/twenty_twenty_two/day_one/input.txt";
+
+    let str: String = read_to_string(file_path).expect("file does not exist");
+
+    // split string into calories carried per elf
+    let sub_str_list: Vec<String> = str
+        .split("\n\n")
+        .map(|sub_str| sub_str.to_string())
+        .collect();
+
+    return sub_str_list;
 }
